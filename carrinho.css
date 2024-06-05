@@ -51,6 +51,10 @@ main {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+main a {
+    text-decoration: none;
+}
+
 main h2 {
     margin-bottom: 20px;
     color: var(--blue);
