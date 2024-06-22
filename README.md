@@ -68,4 +68,3 @@ This is a Node.js application built with Express.js. It includes features for se
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-```
