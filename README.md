@@ -17,7 +17,7 @@ This is a Node.js application built with Express.js. It includes features for se
 
    ```sh
    git clone https://github.com/Samlxrd/TechTweaks.git
-   cd your-repo-name
+   cd TechTweaks
    ```
 
 2. Install the dependencies:
