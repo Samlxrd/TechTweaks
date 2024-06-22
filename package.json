@@ -1,0 +1,29 @@
+{
+  "name": "techtweaks",
+  "version": "1.0.0",
+  "description": "Our Maintenance and Optimization Service System is a comprehensive solution designed to ensure the peak performance, reliability, and efficiency of various mechanical, electrical, and IT infrastructures. This system streamlines the entire process of scheduling, executing, and monitoring maintenance and optimization tasks, providing a robust platform for service teams to deliver exceptional support.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samlxrd/TechTweaks.git"
+  },
+  "keywords": [
+    "maintenance",
+    "optimization",
+    "service"
+  ],
+  "author": "Samlxrd and michel-j-j",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Samlxrd/TechTweaks/issues"
+  },
+  "homepage": "https://github.com/Samlxrd/TechTweaks#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mysql": "^2.18.1"
+  }
+}
