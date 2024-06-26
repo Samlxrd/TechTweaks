@@ -1,14 +1,20 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 const router = require('./routes/index');
-const port = process.env.PORT;
+const port = process.env.PORT || 4000;
 
 //Configuration
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 router(app);
+
 app.listen(port, (error) => {
     if (error) {
         console.error('Server Error');
         return;
     }
-    console.log('Server running on port', 3000);
+    console.log(`Server running on ${port}`);
 })
