@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { inserirCliente, login } = require('../data_access/cliente');
-const { status } = require('express/lib/response');
+const { getServicos, getServicoById } = require('../data_access/servicos');
 const router = Router();
 require('dotenv').config();
 
@@ -8,8 +8,14 @@ router.get('/', (req, res) => {
     res.render('index')
 });
 
-router.get('/servicos', (req, res) => {
-    res.render('servicos')
+router.get('/servicos', async(req, res) => {
+    try {
+        const servicos = await getServicos();
+        res.render('servicos', { title: 'Serviços', servicos})
+    } catch (error) {
+        console.error('Erro ao buscar serviços', error);
+        res.status(500).send({message: 'Erro ao buscar serviços'});
+    }
 });
 
 router.get('/perfil', (req, res) => {
@@ -44,12 +50,18 @@ router.get('/contato', (req, res) => {
     res.render('contato')
 });
 
-router.get('/compra', (req, res) => {
-    res.render('compra')
+router.get('/compra/:servicoId', async (req, res) => {
+    const servicoId = req.params.servicoId;
+    const servico = await getServicoById(servicoId);
+    if (servico) {
+        res.render('compra', { servico });
+    } else {
+        res.status(404).send({ message: 'Serviço não encontrado' });   
+    }
 });
 
-router.get('/carrinho', (req, res) => {
-    res.render('carrinho')
+router.get('/carrinho', async (req, res) => {
+    res.render('carrinho');
 });
 
 router.get('/cadastro', (req, res) => {
