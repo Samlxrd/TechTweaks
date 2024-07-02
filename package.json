@@ -4,7 +4,8 @@
   "description": "Our Maintenance and Optimization Service System is a comprehensive solution designed to ensure the peak performance, reliability, and efficiency of various mechanical, electrical, and IT infrastructures. This system streamlines the entire process of scheduling, executing, and monitoring maintenance and optimization tasks, providing a robust platform for service teams to deliver exceptional support.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,10 @@
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "mysql2": "^3.10.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }
