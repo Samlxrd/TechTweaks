@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
@@ -20,21 +19,12 @@
     </header>
     <main>
         <h2>Carrinho de Compras</h2>
-        <ul>
-            <li>
-                <span>Otimização de Sistema</span>
-                <span>R$ 120,00</span>
-                <button class="btn-remove">Remover</button>
-            </li>
-            <li>
-                <span>Formatação Completa</span>
-                <span>R$ 200,00</span>
-                <button class="btn-remove">Remover</button>
-            </li>
+        <ul id="service-list">
+            <!-- Aquí se insertarán dinámicamente los servicios -->
         </ul>
-        <p><strong>Total:</strong> R$ 320,00</p>
-        <a href="compra">
-            <button class="btn">Finalizar Compra</button>
+        <p><strong>Total:</strong> <span id="total">R$ 0,00</span></p>
+        <a href="">
+            <button class="btn" id="finalizar-compra">Finalizar Compra</button>
         </a>
     </main>
     <footer>
@@ -45,6 +35,102 @@
         </nav>
         <p>&copy; 2024 TechTweaks. Todos os direitos reservados.</p>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Obtener el ID del servicio almacenado en la cookie
+            let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+            carrinho.forEach(element => {
+                // Si hay un ID de servicio almacenado en la cookie, hacer la solicitud al servidor
+                if (element.servicoId > 0) {
+                    fetch(`/carrinho/${element.servicoId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                addServiceToCart(data.service);
+                            } else {
+                                console.error('Serviço não encontrado');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro ao buscar serviço:', error);
+                        });
+                } else {
+                    console.error('ID do serviço não encontrado na cookie');
+                }
+            });
+            document.getElementById('finalizar-compra').addEventListener('click', () => {
+                alert('Compra finalizada!');
+                removeAllService()
+            });
+        });
+
+        // Función para agregar un servicio al carrito
+        function addServiceToCart(service) {
+            const serviceList = document.getElementById('service-list');
+            const li = document.createElement('li');
+            li.dataset.id = service.id_servico;
+            li.innerHTML = `<span>${service.nome}</span><span>R$ ${service.valor},00</span><button class="btn-remove">Remover</button>`;
+            serviceList.appendChild(li);
+            updateTotal(service.valor); // Actualizar el total
+
+            // Añadir evento al botón de remover
+            li.querySelector('.btn-remove').addEventListener('click', () => {
+                removeServiceFromCart(li, service.valor);
+            });
+        }
+
+        // Función para actualizar el total mostrado en el HTML
+        function updateTotal(amount) {
+            const totalElement = document.getElementById('total');
+            const currentTotalString = totalElement.textContent.replace('R$ ', '').replace('.', '').replace(',', '.');
+            const currentTotal = parseFloat(currentTotalString) || 0; // Asegúrate de que currentTotal es un número
+            const newTotal = currentTotal + parseFloat(amount); // Asegúrate de que amount es un número
+
+            if (!isNaN(newTotal)) {
+                totalElement.textContent = `R$ ${newTotal.toFixed(2).replace('.', ',')}`;
+            } else {
+                console.error('Erro ao calcular o total: valores inválidos.');
+            }
+        }
+
+        // Función para remover un servicio del carrito
+        function removeServiceFromCart(listItem, amount) {
+            const serviceId = listItem.dataset.id;
+            listItem.remove(); // Remover el elemento del DOM
+            updateTotal(-amount); // Restar el valor del total
+
+            // Actualizar el carrito en localStorage
+            let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+            carrinho = carrinho.filter(item => item.servicoId != serviceId);
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
+        }
+        function removeAllService() {
+
+            // Remover todos los elementos del DOM
+            const serviceList = document.getElementById('service-list');
+            while (serviceList.firstChild) {
+                serviceList.removeChild(serviceList.firstChild);
+            }
+            // Resetear el total
+            updateTotal(-parseFloat(document.getElementById('total').textContent.replace('R$ ', '').replace('.', '').replace(',', '.')));
+            // Limpiar el carrito en localStorage
+            localStorage.removeItem('carrinho');
+
+        }
+        // Función para obtener el valor de una cookie por su nombre
+        function getCookie(name) {
+            const cookieString = document.cookie;
+            const cookies = cookieString.split(';');
+            for (let cookie of cookies) {
+                const [cookieName, cookieValue] = cookie.split('=');
+                if (cookieName.trim() === name) {
+                    return cookieValue;
+                }
+            }
+            return null;
+        }
+    </script>
 </body>
 
 </html>
